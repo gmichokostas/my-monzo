@@ -18,8 +18,11 @@ _For deploying to Heroku have a look at the Heroku branch https://github.com/gmi
 
 6) Grab your [Twilio's](https://www.twilio.com) credentials, configure Twilio with your `$EDITOR` and you're ready to go:
 
+    ```
     $ cp twilio/config.json.sample twilio/config.json
+    
     $ $EDITOR config.json
+    ```
 
 ## Configuration
 
