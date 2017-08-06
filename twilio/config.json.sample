@@ -1,0 +1,9 @@
+{
+  "APIURL"   : "https://api.twilio.com/endpoint",
+  "From"     : "+44123456789",
+  "To"       : "+44987654321",
+  "BasicAuth": {
+    "Username" : "Abc123",
+    "Password" : "Abc123"
+  }
+}
