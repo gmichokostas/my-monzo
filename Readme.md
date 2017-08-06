@@ -4,6 +4,8 @@ Sends txt messages using [Twilio](https://www.twilio.com)'s API every time you u
 
 ## Quick how-to
 
+_For deploying to Heroku have a look at the Heroku branch https://github.com/gmichokostas/my-monzo/tree/heroku_
+
 1) First you need to own a [Monzo](https://monzo.com) card.
 
 2) Install [Go](https://golang.org/doc/install) at your machine.
