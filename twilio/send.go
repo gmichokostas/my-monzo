@@ -2,15 +2,13 @@ package twilio
 
 import (
 	"bytes"
-	"encoding/json"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 )
 
-// Configuration configs twillio client
+// Configuration data for the twillio client
 type Configuration struct {
 	APIURL    string
 	From      string
@@ -24,15 +22,11 @@ type Configuration struct {
 var configuration Configuration
 
 func init() {
-	confData, err := ioutil.ReadFile("twilio/config.json")
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	if err := json.Unmarshal(confData, &configuration); err != nil {
-		log.Fatalln(err)
-	}
-
+	configuration.APIURL = os.Getenv("APIURL")
+	configuration.From = os.Getenv("From")
+	configuration.To = os.Getenv("To")
+	configuration.BasicAuth.Username = os.Getenv("Username")
+	configuration.BasicAuth.Password = os.Getenv("Password")
 }
 
 // SendMessage sends message to destination number
