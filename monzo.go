@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // Transaction created from Monzo
 type Transaction struct {
 	Type string
@@ -37,4 +39,14 @@ func (t Transaction) category() string {
 
 func (t Transaction) merchantName() string {
 	return t.Data.Merchant.Name
+}
+
+func (t Transaction) String() string {
+	return fmt.Sprintf("\nType: %s\nDescription: %s\nMerchant: %s\nAmount: %.2f\nCurrency: %s\nCategory: %s\n",
+		t.Type,
+		t.description(),
+		t.merchantName(),
+		t.amount(),
+		t.currency(),
+		t.category())
 }

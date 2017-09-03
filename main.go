@@ -23,8 +23,6 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	log.Println(transaction)
-
 	body := buildMessage(transaction)
 	response, err := twilio.SendMessage(body)
 	if err != nil {
@@ -36,11 +34,5 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 
 // buildMessage builds the body of the text message to be send
 func buildMessage(transaction Transaction) string {
-	return fmt.Sprintf("\nType: %s\nDescription: %s\nMerchant: %s\nAmount: %.2f\nCurrency: %s\nCategory: %s\n",
-		transaction.Type,
-		transaction.description(),
-		transaction.merchantName(),
-		transaction.amount(),
-		transaction.currency(),
-		transaction.category())
+	return transaction.String()
 }
