@@ -2,44 +2,30 @@ package twilio
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
 )
 
-// Configuration configs twillio client
-type Configuration struct {
-	APIURL    string
-	From      string
-	To        string
-	BasicAuth struct {
-		Username string
-		Password string
-	}
+// Twilio client
+type Twilio struct {
+	config Config
 }
 
-var configuration Configuration
+func New() (*Twilio, error) {
+	c := Config{}
 
-func init() {
-	confData, err := ioutil.ReadFile("twilio/config.json")
-	if err != nil {
-		log.Fatalln(err)
+	if err := c.Init(); err != nil {
+		return nil, err
 	}
 
-	if err := json.Unmarshal(confData, &configuration); err != nil {
-		log.Fatalln(err)
-	}
-
+	return &Twilio{config: c}, nil
 }
 
-// SendMessage sends message to destination number
-func SendMessage(body string) (response *http.Response, err error) {
-	request, err := buildRequest(body)
+func (t Twilio) Send(body string) (response *http.Response, err error) {
+	request, err := t.buildRequest(body)
 	if err != nil {
 		return nil, err
 	}
@@ -65,18 +51,18 @@ func SendMessage(body string) (response *http.Response, err error) {
 }
 
 // buildRequest builds the request to be send to Twilio
-func buildRequest(body string) (*http.Request, error) {
+func (t Twilio) buildRequest(body string) (*http.Request, error) {
 	data := url.Values{}
-	data.Set("To", configuration.To)
-	data.Add("From", configuration.From)
+	data.Set("To", t.config.To)
+	data.Add("From", t.config.From)
 	data.Add("Body", body)
 
-	req, err := http.NewRequest("POST", configuration.APIURL, bytes.NewBufferString(data.Encode()))
+	req, err := http.NewRequest("POST", t.config.APIURL, bytes.NewBufferString(data.Encode()))
 	if err != nil {
 		return nil, err
 	}
 
-	req.SetBasicAuth(configuration.BasicAuth.Username, configuration.BasicAuth.Password)
+	req.SetBasicAuth(t.config.BasicAuth.Username, t.config.BasicAuth.Password)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
 
