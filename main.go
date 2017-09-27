@@ -6,9 +6,19 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/gmichokostas/my-monzo/twilio"
 )
+
+var (
+	client *Client
+	err    error
+)
+
+func init() {
+	client, err = NewClient()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func main() {
 	http.HandleFunc("/transaction", transaction)
@@ -24,7 +34,8 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	body := buildMessage(transaction)
-	response, err := twilio.SendMessage(body)
+
+	response, err := client.Send(body)
 	if err != nil {
 		log.Fatalln(err)
 	}
