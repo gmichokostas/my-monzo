@@ -26,6 +26,11 @@ func main() {
 }
 
 func transaction(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
 	var transaction Transaction
 
 	if err := json.NewDecoder(r.Body).Decode(&transaction); err != nil {
