@@ -32,9 +32,9 @@ func transaction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var transaction Transaction
-
 	if err := json.NewDecoder(r.Body).Decode(&transaction); err != nil {
-		log.Fatalln(err)
+		http.Error(w, "could not decode request: "+err.Error(), http.StatusBadRequest)
+		return
 	}
 	defer r.Body.Close()
 
